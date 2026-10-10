@@ -1,7 +1,7 @@
-import { useLocation } from "react-router-dom"
-import { useTheme } from "@/context/ThemeContext"
-import { Sun, Moon } from "lucide-react"
-import { Button } from "@/components/ui/button" 
+import { useLocation } from "react-router-dom";
+import { useTheme } from "@/context/ThemeContext";
+import { Sun, Moon } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const routeTitles: Record<string, string> = {
   "/": "Dashboard",
@@ -11,17 +11,17 @@ const routeTitles: Record<string, string> = {
   "/statistics": "Statistics",
   "/notes": "Notes",
   "/end-of-day": "End of Day",
-}
+};
 
 interface TopbarProps {
-  title?: string
+  title?: string;
 }
 
 export function Topbar({ title }: TopbarProps) {
-  const { theme, toggleTheme } = useTheme()
-  const location = useLocation()
+  const { theme, toggleTheme } = useTheme();
+  const location = useLocation();
 
-  const currentTitle = title || routeTitles[location.pathname] || "Dashboard"
+  const currentTitle = title || routeTitles[location.pathname] || "Dashboard";
 
   return (
     <header className="h-16 shrink-0 border-b border-(--border) bg-(--surface) px-6 flex items-center justify-between sticky top-0 z-30">
@@ -46,5 +46,5 @@ export function Topbar({ title }: TopbarProps) {
         </Button>
       </div>
     </header>
-  )
+  );
 }
