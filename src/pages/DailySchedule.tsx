@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Check, Plus, X, Trash2, RotateCcw } from "lucide-react";
+import { Check, Plus, X, Trash2 } from "lucide-react";
 
 interface ScheduleItem {
   id: string;
@@ -10,68 +10,20 @@ interface ScheduleItem {
 }
 
 const initialSchedule: ScheduleItem[] = [
-  {
-    id: "1",
-    time: "09:00–09:15",
-    icon: "🙏",
-    title: " Planning",
-    completed: false,
-  },
-  {
-    id: "2",
-    time: "09:15–10:15",
-    icon: "💻",
-    title: "Project Development",
-    completed: false,
-  },
-  {
-    id: "3",
-    time: "10:15–11:00",
-    icon: "🇬🇧",
-    title: "English Study",
-    completed: false,
-  },
-  {
-    id: "4",
-    time: "11:00–11:15",
-    icon: "☕",
-    title: "Break",
-    completed: false,
-  },
-  {
-    id: "5",
-    time: "11:15–12:15",
-    icon: "📊",
-    title: "Data Analysis",
-    completed: false,
-  },
-  {
-    id: "6",
-    time: "12:15–01:00",
-    icon: "💪",
-    title: "Exercises & Practice",
-    completed: false,
-  },
-  {
-    id: "7",
-    time: "01:00–02:00",
-    icon: "🍽️",
-    title: "Lunch & Rest",
-    completed: false,
-  },
-  {
-    id: "8",
-    time: "04:45–05:00",
-    icon: "📝",
-    title: "Daily Review",
-    completed: false,
-  },
+  { id: "1", time: "09:00–09:15", icon: "🙏", title: "Morning Prayer & Planning", completed: false },
+  { id: "2", time: "09:15–10:15", icon: "💻", title: "Project Development", completed: false },
+  { id: "3", time: "10:15–11:00", icon: "🇬🇧", title: "English Study", completed: false },
+  { id: "4", time: "11:00–11:15", icon: "☕", title: "Break", completed: false },
+  { id: "5", time: "11:15–12:15", icon: "📊", title: "Data Analysis", completed: false },
+  { id: "6", time: "12:15–01:00", icon: "💪", title: "Exercises & Practice", completed: false },
+  { id: "7", time: "01:00–02:00", icon: "🍽️", title: "Lunch & Rest", completed: false },
+  { id: "8", time: "04:45–05:00", icon: "📝", title: "Daily Review", completed: false },
 ];
 
 export function DailySchedule() {
   const [items, setItems] = useState<ScheduleItem[]>(() => {
     const saved = localStorage.getItem("daily_schedule_items");
-    if (saved) {
+    if (saved !== null) {
       try {
         return JSON.parse(saved);
       } catch (e) {
@@ -97,19 +49,14 @@ export function DailySchedule() {
   const toggleComplete = (id: string) => {
     setItems((prev) =>
       prev.map((item) =>
-        item.id === id ? { ...item, completed: !item.completed } : item,
-      ),
+        item.id === id ? { ...item, completed: !item.completed } : item
+      )
     );
   };
 
   const handleDeleteTask = (id: string, e: React.MouseEvent) => {
-    e.stopPropagation(); // منع تفعيل الضغط على المهمة عند النقر على زر الحذف
+    e.stopPropagation();
     setItems((prev) => prev.filter((item) => item.id !== id));
-  };
-
-  const handleResetSchedule = () => {
-    localStorage.removeItem("daily_schedule_items");
-    setItems(initialSchedule);
   };
 
   const handleAddTask = (e: React.FormEvent) => {
@@ -155,77 +102,70 @@ export function DailySchedule() {
           <h3 className="text-xs font-bold uppercase tracking-wider text-(--primary)">
             Daily Timetable
           </h3>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={handleResetSchedule}
-              className="btn text-xs py-1.5 px-3 flex items-center gap-1.5 text-(--muted-foreground) hover:text-(--foreground)"
-              title="Reset to default tasks"
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-              <span>Reset</span>
-            </button>
-            <button
-              onClick={() => setIsModalOpen(true)}
-              className="btn btn-primary text-xs py-1.5 px-3 flex items-center gap-1.5"
-            >
-              <Plus className="w-4 h-4" />
-              <span>Add Task</span>
-            </button>
-          </div>
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="btn btn-primary text-xs py-1.5 px-3 flex items-center gap-1.5"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Add Task</span>
+          </button>
         </div>
 
         <div className="space-y-2">
-          {items.map((item) => (
-            <div
-              key={item.id}
-              onClick={() => toggleComplete(item.id)}
-              className={`group flex items-center justify-between p-3.5 rounded-(--radius) transition-all cursor-pointer border ${
-                item.completed
-                  ? "bg-(--secondary) border-(--primary) text-(--foreground)"
-                  : "border-transparent hover:bg-(--surface-muted) text-(--foreground)"
-              }`}
-            >
-              <div className="flex items-center gap-4 min-w-0">
-                <div
-                  className={`w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${
-                    item.completed
-                      ? "bg-(--primary) border-(--primary) text-(--primary-foreground)"
-                      : "border-(--muted-foreground) group-hover:border-(--primary)"
-                  }`}
-                >
-                  {item.completed && (
-                    <Check className="w-3.5 h-3.5 stroke-[3]" />
-                  )}
-                </div>
-
-                <span className="text-xs font-mono text-(--muted-foreground) w-24 shrink-0">
-                  {item.time}
-                </span>
-
-                <div className="flex items-center gap-2.5 min-w-0">
-                  <span className="text-base shrink-0">{item.icon}</span>
-                  <span
-                    className={`text-sm font-medium transition-all truncate ${
+          {items.length === 0 ? (
+            <p className="text-center text-xs text-(--muted-foreground) py-6">
+              No tasks available. Add a new task using the button above.
+            </p>
+          ) : (
+            items.map((item) => (
+              <div
+                key={item.id}
+                onClick={() => toggleComplete(item.id)}
+                className={`group flex items-center justify-between p-3.5 rounded-(--radius) transition-all cursor-pointer border ${
+                  item.completed
+                    ? "bg-(--secondary) border-(--primary) text-(--foreground)"
+                    : "border-transparent hover:bg-(--surface-muted) text-(--foreground)"
+                }`}
+              >
+                <div className="flex items-center gap-4 min-w-0">
+                  <div
+                    className={`w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${
                       item.completed
-                        ? "line-through text-(--muted-foreground)"
-                        : "text-(--foreground)"
+                        ? "bg-(--primary) border-(--primary) text-(--primary-foreground)"
+                        : "border-(--muted-foreground) group-hover:border-(--primary)"
                     }`}
                   >
-                    {item.title}
-                  </span>
-                </div>
-              </div>
+                    {item.completed && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                  </div>
 
-              {/* زر حذف المهمة */}
-              <button
-                onClick={(e) => handleDeleteTask(item.id, e)}
-                className="p-1.5 rounded-(--radius) text-(--muted-foreground) hover:text-red-500 hover:bg-(--surface) transition-colors opacity-60 group-hover:opacity-100"
-                title="Delete task"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
-            </div>
-          ))}
+                  <span className="text-xs font-mono text-(--muted-foreground) w-24 shrink-0">
+                    {item.time}
+                  </span>
+
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <span className="text-base shrink-0">{item.icon}</span>
+                    <span
+                      className={`text-sm font-medium transition-all truncate ${
+                        item.completed
+                          ? "line-through text-(--muted-foreground)"
+                          : "text-(--foreground)"
+                      }`}
+                    >
+                      {item.title}
+                    </span>
+                  </div>
+                </div>
+
+                <button
+                  onClick={(e) => handleDeleteTask(item.id, e)}
+                  className="p-1.5 rounded-(--radius) text-(--muted-foreground) hover:text-red-500 hover:bg-(--surface) transition-colors opacity-60 group-hover:opacity-100"
+                  title="Delete task"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            ))
+          )}
         </div>
       </div>
 
