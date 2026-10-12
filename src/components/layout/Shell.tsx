@@ -8,11 +8,11 @@ type ShellProps = {
 
 export function Shell({ children, title }: ShellProps) {
   return (
-    <div className="flex flex-col sm:flex-row min-h-screen bg-(--background) text-(--foreground) font-sans antialiased">
+    <div className="flex min-h-screen bg-(--background) text-(--foreground) font-sans antialiased min-w-[768px]">
       <Sidebar />
       <div className="flex-1 flex flex-col min-w-0">
         <Topbar title={title} />
-        <main className="p-3 sm:p-4 md:p-6 flex-1 overflow-y-auto max-w-6xl w-full mx-auto">
+        <main className="p-6 flex-1 overflow-y-auto max-w-6xl w-full mx-auto">
           {children}
         </main>
       </div>
