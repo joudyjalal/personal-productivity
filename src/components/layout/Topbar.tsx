@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { useTheme } from "@/context/ThemeContext";
-import { Sun, Moon } from "lucide-react";
+import { Sun, Moon, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const routeTitles: Record<string, string> = {
@@ -8,40 +8,58 @@ const routeTitles: Record<string, string> = {
   "/projects": "Projects",
   "/schedule": "Daily Schedule",
   "/goals": "Goals",
-  "/statistics": "Statistics",
+  "/stats": "Statistics",
   "/notes": "Notes",
-  "/end-of-day": "End of Day",
+  "/eod": "End of Day",
 };
 
 interface TopbarProps {
   title?: string;
+  onMenuClick?: () => void;
 }
 
-export function Topbar({ title }: TopbarProps) {
+export function Topbar({ title, onMenuClick }: TopbarProps) {
   const { theme, toggleTheme } = useTheme();
   const location = useLocation();
 
-  const currentTitle = title || routeTitles[location.pathname] || "Dashboard";
+  const currentTitle =
+    title || routeTitles[location.pathname] || "Dashboard";
 
   return (
-    <header className="h-16 shrink-0 border-b border-(--border) bg-(--surface) px-6 flex items-center justify-between sticky top-0 z-30">
-      <div>
-        <h2 className="text-lg font-bold text-(--foreground) leading-none">
+    <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center justify-between gap-3 border-b border-(--border) bg-(--surface) px-3 sm:h-16 sm:px-4 md:px-6">
+      <div className="flex min-w-0 flex-1 items-center gap-2.5 sm:gap-3">
+        
+        <Button
+          type="button"
+          variant="outline"
+          size="icon"
+          onClick={onMenuClick}
+          aria-label="Open navigation menu"
+          title="Open menu"
+          className="h-9 w-9 shrink-0 inline-flex md:hidden"
+        >
+          <Menu className="h-5 w-5" />
+        </Button>
+
+        <h2 className="min-w-0 truncate text-base font-bold leading-tight text-(--foreground) sm:text-lg">
           {currentTitle}
         </h2>
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex shrink-0 items-center gap-2 sm:gap-3">
         <Button
+          type="button"
           variant="outline"
           size="icon"
           onClick={toggleTheme}
           title="Toggle Theme"
+          aria-label="Toggle Theme"
+          className="h-9 w-9 sm:h-10 sm:w-10"
         >
           {theme === "dark" ? (
-            <Sun className="w-5 h-5 text-(--warning)" />
+            <Sun className="h-5 w-5 text-(--warning)" />
           ) : (
-            <Moon className="w-5 h-5 text-(--info)" />
+            <Moon className="h-5 w-5 text-(--info)" />
           )}
         </Button>
       </div>

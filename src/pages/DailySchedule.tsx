@@ -79,13 +79,14 @@ export function DailySchedule() {
   };
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto pb-10">
-      <div className="card p-5 sm:p-6 rounded-(--radius-lg) border border-(--border) bg-(--surface) shadow-(--shadow-sm)">
+    <div className="space-y-4 sm:space-y-6 max-w-4xl mx-auto pb-10 px-2 sm:px-0">
+      
+      <div className="card p-4 sm:p-6 rounded-(--radius-lg) border border-(--border) bg-(--surface) shadow-(--shadow-sm)">
         <div className="flex items-center justify-between mb-3">
           <span className="text-xs font-bold uppercase tracking-wider text-(--primary)">
             Daily Progress
           </span>
-          <span className="text-2xl font-extrabold text-(--primary)">
+          <span className="text-xl sm:text-2xl font-extrabold text-(--primary)">
             {progressPercentage}%
           </span>
         </div>
@@ -97,14 +98,15 @@ export function DailySchedule() {
         </div>
       </div>
 
-      <div className="card p-5 sm:p-6 rounded-(--radius-lg) border border-(--border) bg-(--surface) shadow-(--shadow-sm)">
-        <div className="mb-6 flex items-center justify-between">
+      
+      <div className="card p-4 sm:p-6 rounded-(--radius-lg) border border-(--border) bg-(--surface) shadow-(--shadow-sm)">
+        <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <h3 className="text-xs font-bold uppercase tracking-wider text-(--primary)">
             Daily Timetable
           </h3>
           <button
             onClick={() => setIsModalOpen(true)}
-            className="btn btn-primary text-xs py-1.5 px-3 flex items-center gap-1.5"
+            className="btn btn-primary text-xs py-2 px-3.5 flex items-center justify-center gap-1.5 w-full sm:w-auto"
           >
             <Plus className="w-4 h-4" />
             <span>Add Task</span>
@@ -121,31 +123,32 @@ export function DailySchedule() {
               <div
                 key={item.id}
                 onClick={() => toggleComplete(item.id)}
-                className={`group flex items-center justify-between p-3.5 rounded-(--radius) transition-all cursor-pointer border ${
+                className={`group flex flex-col sm:flex-row sm:items-center justify-between p-3 sm:p-3.5 rounded-(--radius) transition-all cursor-pointer border gap-2 sm:gap-4 ${
                   item.completed
                     ? "bg-(--secondary) border-(--primary) text-(--foreground)"
                     : "border-transparent hover:bg-(--surface-muted) text-(--foreground)"
                 }`}
               >
-                <div className="flex items-center gap-4 min-w-0">
+                <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
                   <div
-                    className={`w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${
+                    className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${
                       item.completed
                         ? "bg-(--primary) border-(--primary) text-(--primary-foreground)"
                         : "border-(--muted-foreground) group-hover:border-(--primary)"
                     }`}
                   >
-                    {item.completed && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                    {item.completed && <Check className="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[3]" />}
                   </div>
 
-                  <span className="text-xs font-mono text-(--muted-foreground) w-24 shrink-0">
+                 
+                  <span className="text-[11px] sm:text-xs font-mono text-(--muted-foreground) shrink-0 sm:w-24">
                     {item.time}
                   </span>
 
-                  <div className="flex items-center gap-2.5 min-w-0">
-                    <span className="text-base shrink-0">{item.icon}</span>
+                  <div className="flex items-center gap-2 min-w-0 flex-1">
+                    <span className="text-sm sm:text-base shrink-0">{item.icon}</span>
                     <span
-                      className={`text-sm font-medium transition-all truncate ${
+                      className={`text-xs sm:text-sm font-medium transition-all truncate ${
                         item.completed
                           ? "line-through text-(--muted-foreground)"
                           : "text-(--foreground)"
@@ -156,24 +159,28 @@ export function DailySchedule() {
                   </div>
                 </div>
 
-                <button
-                  onClick={(e) => handleDeleteTask(item.id, e)}
-                  className="p-1.5 rounded-(--radius) text-(--muted-foreground) hover:text-red-500 hover:bg-(--surface) transition-colors opacity-60 group-hover:opacity-100"
-                  title="Delete task"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
+              
+                <div className="flex items-center justify-end sm:justify-start">
+                  <button
+                    onClick={(e) => handleDeleteTask(item.id, e)}
+                    className="p-1.5 rounded-(--radius) text-(--muted-foreground) hover:text-red-500 hover:bg-(--surface) transition-colors opacity-80 sm:opacity-60 group-hover:opacity-100"
+                    title="Delete task"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             ))
           )}
         </div>
       </div>
 
+   
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-          <div className="card w-full max-w-md p-6 bg-(--surface) border border-(--border) shadow-xl rounded-(--radius-lg)">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-3 sm:p-4">
+          <div className="card w-full max-w-md p-4 sm:p-6 bg-(--surface) border border-(--border) shadow-xl rounded-(--radius-lg)">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-base font-bold text-(--foreground)">
+              <h3 className="text-sm sm:text-base font-bold text-(--foreground)">
                 Add New Task
               </h3>
               <button
@@ -184,7 +191,7 @@ export function DailySchedule() {
               </button>
             </div>
 
-            <form onSubmit={handleAddTask} className="space-y-4">
+            <form onSubmit={handleAddTask} className="space-y-3 sm:space-y-4">
               <div>
                 <label className="block text-xs font-semibold text-(--muted-foreground) mb-1">
                   Time Range (e.g. 05:00–05:30)
@@ -194,6 +201,7 @@ export function DailySchedule() {
                   value={newTime}
                   onChange={(e) => setNewTime(e.target.value)}
                   placeholder="05:00–05:30"
+                  className="w-full text-sm"
                   required
                 />
               </div>
@@ -208,6 +216,7 @@ export function DailySchedule() {
                   onChange={(e) => setNewIcon(e.target.value)}
                   placeholder="📌"
                   maxLength={4}
+                  className="w-full text-sm"
                   required
                 />
               </div>
@@ -221,6 +230,7 @@ export function DailySchedule() {
                   value={newTitle}
                   onChange={(e) => setNewTitle(e.target.value)}
                   placeholder="Task description..."
+                  className="w-full text-sm"
                   required
                 />
               </div>
@@ -229,11 +239,11 @@ export function DailySchedule() {
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="btn"
+                  className="btn text-xs sm:text-sm py-2 px-3"
                 >
                   Cancel
                 </button>
-                <button type="submit" className="btn btn-primary">
+                <button type="submit" className="btn btn-primary text-xs sm:text-sm py-2 px-3">
                   Save Task
                 </button>
               </div>
