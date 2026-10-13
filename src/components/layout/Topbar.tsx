@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useTheme } from "@/context/ThemeContext";
 import { Sun, Moon, Menu } from "lucide-react";
@@ -21,6 +22,18 @@ interface TopbarProps {
 export function Topbar({ title, onMenuClick }: TopbarProps) {
   const { theme, toggleTheme } = useTheme();
   const location = useLocation();
+  
+
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const currentTitle =
     title || routeTitles[location.pathname] || "Dashboard";
@@ -28,18 +41,20 @@ export function Topbar({ title, onMenuClick }: TopbarProps) {
   return (
     <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center justify-between gap-3 border-b border-(--border) bg-(--surface) px-3 sm:h-16 sm:px-4 md:px-6">
       <div className="flex min-w-0 flex-1 items-center gap-2.5 sm:gap-3">
-        
-        <Button
-          type="button"
-          variant="outline"
-          size="icon"
-          onClick={onMenuClick}
-          aria-label="Open navigation menu"
-          title="Open menu"
-          className="h-9 w-9 shrink-0 inline-flex md:hidden"
-        >
-          <Menu className="h-5 w-5" />
-        </Button>
+       
+        {isMobile && (
+          <Button
+            type="button"
+            variant="outline"
+            size="icon"
+            onClick={onMenuClick}
+            aria-label="Open navigation menu"
+            title="Open menu"
+            className="h-9 w-9 shrink-0"
+          >
+            <Menu className="h-5 w-5" />
+          </Button>
+        )}
 
         <h2 className="min-w-0 truncate text-base font-bold leading-tight text-(--foreground) sm:text-lg">
           {currentTitle}
