@@ -29,6 +29,14 @@ export function Goals() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newTitle, setNewTitle] = useState("");
 
+  
+  const currentDate = new Date().toLocaleDateString("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
   useEffect(() => {
     localStorage.setItem("weekly_goals_items", JSON.stringify(goals));
   }, [goals]);
@@ -70,8 +78,9 @@ export function Goals() {
           <h2 className="text-lg sm:text-xl font-bold text-(--foreground)">
             Goals
           </h2>
+        
           <p className="text-xs text-(--muted-foreground)">
-            Wednesday, October 14, 2026
+            {currentDate}
           </p>
         </div>
         <button
