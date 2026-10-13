@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Check, Plus, X, Trash2 } from "lucide-react";
 
-interface ScheduleItem {
+type ScheduleItem = {
   id: string;
   time: string;
   icon: string;
@@ -10,14 +10,62 @@ interface ScheduleItem {
 }
 
 const initialSchedule: ScheduleItem[] = [
-  { id: "1", time: "09:00–09:15", icon: "🙏", title: "Morning Prayer & Planning", completed: false },
-  { id: "2", time: "09:15–10:15", icon: "💻", title: "Project Development", completed: false },
-  { id: "3", time: "10:15–11:00", icon: "🇬🇧", title: "English Study", completed: false },
-  { id: "4", time: "11:00–11:15", icon: "☕", title: "Break", completed: false },
-  { id: "5", time: "11:15–12:15", icon: "📊", title: "Data Analysis", completed: false },
-  { id: "6", time: "12:15–01:00", icon: "💪", title: "Exercises & Practice", completed: false },
-  { id: "7", time: "01:00–02:00", icon: "🍽️", title: "Lunch & Rest", completed: false },
-  { id: "8", time: "04:45–05:00", icon: "📝", title: "Daily Review", completed: false },
+  {
+    id: "1",
+    time: "09:00–09:15",
+    icon: "🙏",
+    title: "Morning Prayer & Planning",
+    completed: false,
+  },
+  {
+    id: "2",
+    time: "09:15–10:15",
+    icon: "💻",
+    title: "Project Development",
+    completed: false,
+  },
+  {
+    id: "3",
+    time: "10:15–11:00",
+    icon: "🇬🇧",
+    title: "English Study",
+    completed: false,
+  },
+  {
+    id: "4",
+    time: "11:00–11:15",
+    icon: "☕",
+    title: "Break",
+    completed: false,
+  },
+  {
+    id: "5",
+    time: "11:15–12:15",
+    icon: "📊",
+    title: "Data Analysis",
+    completed: false,
+  },
+  {
+    id: "6",
+    time: "12:15–01:00",
+    icon: "💪",
+    title: "Exercises & Practice",
+    completed: false,
+  },
+  {
+    id: "7",
+    time: "01:00–02:00",
+    icon: "🍽️",
+    title: "Lunch & Rest",
+    completed: false,
+  },
+  {
+    id: "8",
+    time: "04:45–05:00",
+    icon: "📝",
+    title: "Daily Review",
+    completed: false,
+  },
 ];
 
 export function DailySchedule() {
@@ -49,8 +97,8 @@ export function DailySchedule() {
   const toggleComplete = (id: string) => {
     setItems((prev) =>
       prev.map((item) =>
-        item.id === id ? { ...item, completed: !item.completed } : item
-      )
+        item.id === id ? { ...item, completed: !item.completed } : item,
+      ),
     );
   };
 
@@ -80,7 +128,6 @@ export function DailySchedule() {
 
   return (
     <div className="space-y-4 sm:space-y-6 max-w-4xl mx-auto pb-10 px-2 sm:px-0">
-      
       <div className="card p-4 sm:p-6 rounded-(--radius-lg) border border-(--border) bg-(--surface) shadow-(--shadow-sm)">
         <div className="flex items-center justify-between mb-3">
           <span className="text-xs font-bold uppercase tracking-wider text-(--primary)">
@@ -98,7 +145,6 @@ export function DailySchedule() {
         </div>
       </div>
 
-      
       <div className="card p-4 sm:p-6 rounded-(--radius-lg) border border-(--border) bg-(--surface) shadow-(--shadow-sm)">
         <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <h3 className="text-xs font-bold uppercase tracking-wider text-(--primary)">
@@ -137,16 +183,19 @@ export function DailySchedule() {
                         : "border-(--muted-foreground) group-hover:border-(--primary)"
                     }`}
                   >
-                    {item.completed && <Check className="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[3]" />}
+                    {item.completed && (
+                      <Check className="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[3]" />
+                    )}
                   </div>
 
-                 
                   <span className="text-[11px] sm:text-xs font-mono text-(--muted-foreground) shrink-0 sm:w-24">
                     {item.time}
                   </span>
 
                   <div className="flex items-center gap-2 min-w-0 flex-1">
-                    <span className="text-sm sm:text-base shrink-0">{item.icon}</span>
+                    <span className="text-sm sm:text-base shrink-0">
+                      {item.icon}
+                    </span>
                     <span
                       className={`text-xs sm:text-sm font-medium transition-all truncate ${
                         item.completed
@@ -159,7 +208,6 @@ export function DailySchedule() {
                   </div>
                 </div>
 
-              
                 <div className="flex items-center justify-end sm:justify-start">
                   <button
                     onClick={(e) => handleDeleteTask(item.id, e)}
@@ -175,7 +223,6 @@ export function DailySchedule() {
         </div>
       </div>
 
-   
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-3 sm:p-4">
           <div className="card w-full max-w-md p-4 sm:p-6 bg-(--surface) border border-(--border) shadow-xl rounded-(--radius-lg)">
@@ -243,7 +290,10 @@ export function DailySchedule() {
                 >
                   Cancel
                 </button>
-                <button type="submit" className="btn btn-primary text-xs sm:text-sm py-2 px-3">
+                <button
+                  type="submit"
+                  className="btn btn-primary text-xs sm:text-sm py-2 px-3"
+                >
                   Save Task
                 </button>
               </div>

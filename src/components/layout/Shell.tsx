@@ -1,4 +1,3 @@
-
 import { useState, type ReactNode } from "react";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Topbar } from "@/components/layout/Topbar";
@@ -16,7 +15,6 @@ export function Shell({ children, title }: ShellProps) {
 
   return (
     <div className="relative flex min-h-screen w-full overflow-x-hidden bg-(--background) font-sans text-(--foreground) antialiased">
- 
       {sidebarOpen && (
         <button
           type="button"

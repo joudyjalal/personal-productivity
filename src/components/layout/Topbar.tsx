@@ -14,7 +14,7 @@ const routeTitles: Record<string, string> = {
   "/eod": "End of Day",
 };
 
-interface TopbarProps {
+type TopbarProps ={
   title?: string;
   onMenuClick?: () => void;
 }
@@ -22,7 +22,6 @@ interface TopbarProps {
 export function Topbar({ title, onMenuClick }: TopbarProps) {
   const { theme, toggleTheme } = useTheme();
   const location = useLocation();
-  
 
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
@@ -35,13 +34,11 @@ export function Topbar({ title, onMenuClick }: TopbarProps) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const currentTitle =
-    title || routeTitles[location.pathname] || "Dashboard";
+  const currentTitle = title || routeTitles[location.pathname] || "Dashboard";
 
   return (
     <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center justify-between gap-3 border-b border-(--border) bg-(--surface) px-3 sm:h-16 sm:px-4 md:px-6">
       <div className="flex min-w-0 flex-1 items-center gap-2.5 sm:gap-3">
-       
         {isMobile && (
           <Button
             type="button"

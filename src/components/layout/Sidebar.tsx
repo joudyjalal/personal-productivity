@@ -27,7 +27,6 @@ type SidebarProps = {
 export function Sidebar({ isOpen, onNavigate }: SidebarProps) {
   return (
     <>
-
       {isOpen && (
         <div
           onClick={onNavigate}
@@ -47,7 +46,6 @@ export function Sidebar({ isOpen, onNavigate }: SidebarProps) {
           ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
         `}
       >
-     
         <div className="mb-6 px-2 pt-1 md:mb-8">
           <h1 className="text-lg font-extrabold tracking-tight text-(--foreground)">
             Daily
@@ -57,7 +55,6 @@ export function Sidebar({ isOpen, onNavigate }: SidebarProps) {
           </div>
         </div>
 
-      
         <nav className="flex-1 space-y-1.5">
           {navItems.map((item) => {
             const Icon = item.icon;
