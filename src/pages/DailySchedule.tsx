@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Check, Plus, X, Trash2 } from "lucide-react";
+import { Check, Plus, X, Trash2, Edit2 } from "lucide-react";
 
 type ScheduleItem = {
   id: string;
@@ -7,61 +7,54 @@ type ScheduleItem = {
   icon: string;
   title: string;
   completed: boolean;
-}
+};
 
 const initialSchedule: ScheduleItem[] = [
   {
     id: "1",
-    time: "09:00–09:15",
+    time: "09:00-09:15",
     icon: "🙏",
     title: "Morning Prayer & Planning",
     completed: false,
   },
   {
     id: "2",
-    time: "09:15–10:15",
+    time: "09:30-10:00",
     icon: "💻",
     title: "Project Development",
     completed: false,
   },
   {
     id: "3",
-    time: "10:15–11:00",
+    time: "10:15-10:30",
     icon: "🇬🇧",
     title: "English Study",
     completed: false,
   },
   {
     id: "4",
-    time: "11:00–11:15",
+    time: "11:00-12:00",
     icon: "☕",
     title: "Break",
     completed: false,
   },
   {
     id: "5",
-    time: "11:15–12:15",
+    time: "12:00-1:00",
     icon: "📊",
     title: "Data Analysis",
     completed: false,
   },
   {
     id: "6",
-    time: "12:15–01:00",
-    icon: "💪",
-    title: "Exercises & Practice",
-    completed: false,
-  },
-  {
-    id: "7",
-    time: "01:00–02:00",
+    time: "01:00",
     icon: "🍽️",
     title: "Lunch & Rest",
     completed: false,
   },
   {
-    id: "8",
-    time: "04:45–05:00",
+    id: "7",
+    time: "04:45",
     icon: "📝",
     title: "Daily Review",
     completed: false,
@@ -82,6 +75,7 @@ export function DailySchedule() {
   });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [newTime, setNewTime] = useState("");
   const [newIcon, setNewIcon] = useState("📌");
   const [newTitle, setNewTitle] = useState("");
@@ -107,22 +101,50 @@ export function DailySchedule() {
     setItems((prev) => prev.filter((item) => item.id !== id));
   };
 
-  const handleAddTask = (e: React.FormEvent) => {
+  const handleOpenAddModal = () => {
+    setEditingId(null);
+    setNewTime("");
+    setNewIcon("📌");
+    setNewTitle("");
+    setIsModalOpen(true);
+  };
+
+  const handleEditClick = (item: ScheduleItem, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setEditingId(item.id);
+    setNewTime(item.time);
+    setNewIcon(item.icon);
+    setNewTitle(item.title);
+    setIsModalOpen(true);
+  };
+
+  const handleSaveTask = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newTitle.trim() || !newTime.trim()) return;
 
-    const newItem: ScheduleItem = {
-      id: Date.now().toString(),
-      time: newTime,
-      icon: newIcon || "📌",
-      title: newTitle,
-      completed: false,
-    };
+    if (editingId) {
+      setItems((prev) =>
+        prev.map((item) =>
+          item.id === editingId
+            ? { ...item, time: newTime, icon: newIcon || "📌", title: newTitle }
+            : item,
+        ),
+      );
+    } else {
+      const newItem: ScheduleItem = {
+        id: Date.now().toString(),
+        time: newTime,
+        icon: newIcon || "📌",
+        title: newTitle,
+        completed: false,
+      };
+      setItems((prev) => [...prev, newItem]);
+    }
 
-    setItems((prev) => [...prev, newItem]);
     setNewTitle("");
     setNewTime("");
     setNewIcon("📌");
+    setEditingId(null);
     setIsModalOpen(false);
   };
 
@@ -151,7 +173,7 @@ export function DailySchedule() {
             Daily Timetable
           </h3>
           <button
-            onClick={() => setIsModalOpen(true)}
+            onClick={handleOpenAddModal}
             className="btn btn-primary text-xs py-2 px-3.5 flex items-center justify-center gap-1.5 w-full sm:w-auto"
           >
             <Plus className="w-4 h-4" />
@@ -169,7 +191,7 @@ export function DailySchedule() {
               <div
                 key={item.id}
                 onClick={() => toggleComplete(item.id)}
-                className={`group flex flex-col sm:flex-row sm:items-center justify-between p-3 sm:p-3.5 rounded-(--radius) transition-all cursor-pointer border gap-2 sm:gap-4 ${
+                className={`group flex items-center justify-between p-3 sm:p-3.5 rounded-(--radius) transition-all cursor-pointer border gap-2 sm:gap-4 ${
                   item.completed
                     ? "bg-(--secondary) border-(--primary) text-(--foreground)"
                     : "border-transparent hover:bg-(--surface-muted) text-(--foreground)"
@@ -184,11 +206,11 @@ export function DailySchedule() {
                     }`}
                   >
                     {item.completed && (
-                      <Check className="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[3]" />
+                      <Check className="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-3" />
                     )}
                   </div>
 
-                  <span className="text-[11px] sm:text-xs font-mono text-(--muted-foreground) shrink-0 sm:w-24">
+                  <span className="text-[11px] sm:text-xs font-mono text-(--muted-foreground) shrink-0 sm:w-20">
                     {item.time}
                   </span>
 
@@ -208,7 +230,17 @@ export function DailySchedule() {
                   </div>
                 </div>
 
-                <div className="flex items-center justify-end sm:justify-start">
+                <div
+                  className="flex items-center gap-1 shrink-0"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <button
+                    onClick={(e) => handleEditClick(item, e)}
+                    className="p-1.5 rounded-(--radius) text-(--muted-foreground) hover:text-(--primary) hover:bg-(--surface) transition-colors opacity-80 sm:opacity-60 group-hover:opacity-100"
+                    title="Edit task"
+                  >
+                    <Edit2 className="w-4 h-4" />
+                  </button>
                   <button
                     onClick={(e) => handleDeleteTask(item.id, e)}
                     className="p-1.5 rounded-(--radius) text-(--muted-foreground) hover:text-red-500 hover:bg-(--surface) transition-colors opacity-80 sm:opacity-60 group-hover:opacity-100"
@@ -228,7 +260,7 @@ export function DailySchedule() {
           <div className="card w-full max-w-md p-4 sm:p-6 bg-(--surface) border border-(--border) shadow-xl rounded-(--radius-lg)">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-sm sm:text-base font-bold text-(--foreground)">
-                Add New Task
+                {editingId ? "Edit Task" : "Add New Task"}
               </h3>
               <button
                 onClick={() => setIsModalOpen(false)}
@@ -238,10 +270,10 @@ export function DailySchedule() {
               </button>
             </div>
 
-            <form onSubmit={handleAddTask} className="space-y-3 sm:space-y-4">
+            <form onSubmit={handleSaveTask} className="space-y-3 sm:space-y-4">
               <div>
                 <label className="block text-xs font-semibold text-(--muted-foreground) mb-1">
-                  Time Range (e.g. 05:00–05:30)
+                  Time
                 </label>
                 <input
                   type="text"
@@ -294,7 +326,7 @@ export function DailySchedule() {
                   type="submit"
                   className="btn btn-primary text-xs sm:text-sm py-2 px-3"
                 >
-                  Save Task
+                  {editingId ? "Update Task" : "Save Task"}
                 </button>
               </div>
             </form>
