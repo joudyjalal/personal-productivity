@@ -14,10 +14,10 @@ const routeTitles: Record<string, string> = {
   "/eod": "End of Day",
 };
 
-type TopbarProps ={
+type TopbarProps = {
   title?: string;
   onMenuClick?: () => void;
-}
+};
 
 export function Topbar({ title, onMenuClick }: TopbarProps) {
   const { theme, toggleTheme } = useTheme();
@@ -34,7 +34,11 @@ export function Topbar({ title, onMenuClick }: TopbarProps) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const currentTitle = title || routeTitles[location.pathname] || null;
+  const currentTitle =
+    title ||
+    (location.state as { title?: string })?.title ||
+    routeTitles[location.pathname] ||
+    null;
 
   return (
     <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center justify-between gap-3 border-b border-(--border) bg-(--surface) px-3 sm:h-16 sm:px-4 md:px-6">

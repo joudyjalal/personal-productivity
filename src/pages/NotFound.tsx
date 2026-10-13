@@ -1,14 +1,8 @@
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AlertCircle, ArrowLeft } from "lucide-react";
 
 export function NotFound() {
   const navigate = useNavigate();
-
- 
-  useEffect(() => {
-    document.title = "404 - Page Not Found";
-  }, []);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4 space-y-4">
@@ -29,7 +23,7 @@ export function NotFound() {
 
    
       <button
-        onClick={() => navigate("/dashboard")}
+        onClick={() =>navigate("/dashboard", { state: { title: "Dashboard" } })}
         className="btn btn-primary text-xs sm:text-sm py-2.5 px-5 flex items-center justify-center gap-2 mt-2"
       >
         <ArrowLeft className="w-4 h-4" />
