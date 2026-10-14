@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { TrendingUp, Lightbulb } from "lucide-react";
 
-interface SleepRecord {
+type SleepRecord {
   date: string;
   hours: number;
   quality: "Poor" | "Good" | "Great";
