@@ -11,6 +11,7 @@ const routeTitles: Record<string, string> = {
   "/goals": "Goals",
   "/stats": "Statistics",
   "/notes": "Notes",
+  "/sleep": "Sleep",
   "/eod": "End of Day",
 };
 

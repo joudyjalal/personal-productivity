@@ -1,21 +1,21 @@
 import { NavLink } from "react-router-dom";
 import {
   LayoutDashboard,
-  FolderGit2,
   Calendar,
   Target,
   BarChart3,
   FileText,
   CheckSquare,
+  Moon,
 } from "lucide-react";
 
 const navItems = [
   { name: "Dashboard", path: "/", icon: LayoutDashboard },
-  { name: "Projects", path: "/projects", icon: FolderGit2 },
   { name: "Daily Schedule", path: "/schedule", icon: Calendar },
   { name: "Goals", path: "/goals", icon: Target },
   { name: "Statistics", path: "/stats", icon: BarChart3 },
   { name: "Notes", path: "/notes", icon: FileText },
+  { name: "Sleep", path: "/sleep", icon: Moon },
   { name: "End of Day", path: "/eod", icon: CheckSquare },
 ];
 

@@ -109,7 +109,7 @@ export default function Notes() {
         </p>
       </div>
 
-      <Card className="bg-(--surface) border-(--border) shadow-sm">
+      <Card className="bg-(--surface)  border-(--border) shadow-sm">
         <CardContent className="p-4 sm:p-6 space-y-4 sm:space-y-6">
           <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none flex-wrap sm:flex-nowrap">
             {categories.map((cat) => (
