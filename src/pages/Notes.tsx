@@ -12,7 +12,7 @@ const initialNotes: Record<string, string> = {
   Personal: "• Grocery shopping\nGym schedule",
 };
 
-export function Notes() {
+export default function Notes() {
   const [categories, setCategories] = useState<string[]>(() => {
     const savedCats = localStorage.getItem("app_notes_categories");
     if (savedCats !== null) {
