@@ -188,7 +188,7 @@ export default function Sleep() {
 
                 return (
                   <div key={idx} className="flex-1 flex flex-col items-center gap-2 h-full justify-end group relative cursor-pointer">
-                    {/* Tooltip يظهر عند المرور أو الضغط على العمود */}
+                   
                     <div className="absolute -top-10 bg-(--background) border border-(--border) px-2.5 py-1 rounded-md text-[11px] font-semibold text-(--foreground) opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-md z-20 pointer-events-none">
                       {rec.hours}h ({rec.quality}) - {rec.date}
                     </div>
