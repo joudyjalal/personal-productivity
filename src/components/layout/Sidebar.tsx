@@ -36,17 +36,15 @@ export function Sidebar({ isOpen, onNavigate }: SidebarProps) {
 
       <aside
         className={`
-          fixed inset-y-0 left-0 z-50
+          fixed top-0 left-0 bottom-0 z-50
           flex h-screen w-[260px] max-w-[85vw] shrink-0 flex-col
-          overflow-y-auto border-r border-(--border)
-          bg-(--surface) p-4 text-(--foreground)
+          border-r border-(--border) bg-(--surface) p-4 text-(--foreground)
           shadow-xl transition-transform duration-300 ease-in-out
-          md:sticky md:top-0 md:z-40 md:h-screen md:w-[240px]
-          md:max-w-none md:translate-x-0 md:shadow-none
+          md:w-[240px] md:max-w-none md:translate-x-0 md:shadow-none
           ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
         `}
       >
-        <div className="mb-6 px-2 pt-1 md:mb-8">
+        <div className="mb-6 px-2 pt-1 md:mb-8 shrink-0">
           <h1 className="text-lg font-extrabold tracking-tight text-(--foreground)">
             Daily
           </h1>
@@ -55,7 +53,7 @@ export function Sidebar({ isOpen, onNavigate }: SidebarProps) {
           </div>
         </div>
 
-        <nav className="flex-1 space-y-1.5">
+        <nav className="flex-1 space-y-1.5 overflow-y-auto pr-1">
           {navItems.map((item) => {
             const Icon = item.icon;
 

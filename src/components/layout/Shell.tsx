@@ -1,35 +1,25 @@
-import { useState, type ReactNode } from "react";
-import { Sidebar } from "@/components/layout/Sidebar";
-import { Topbar } from "@/components/layout/Topbar";
+import { useState } from "react";
+import { Sidebar } from "./Sidebar";
+import { Topbar } from "./Topbar";
 
 type ShellProps = {
-  children?: ReactNode;
-  title?: string;
+  children: React.ReactNode;
 };
 
-export function Shell({ children, title }: ShellProps) {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-
-  const closeSidebar = () => setSidebarOpen(false);
-  const openSidebar = () => setSidebarOpen(true);
+export function Shell({ children }: ShellProps) {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div className="relative flex min-h-screen w-full overflow-x-hidden bg-(--background) font-sans text-(--foreground) antialiased">
-      {sidebarOpen && (
-        <button
-          type="button"
-          aria-label="Close navigation menu"
-          onClick={closeSidebar}
-          className="fixed inset-0 z-40 bg-black/40 backdrop-blur-[2px] md:hidden"
-        />
-      )}
+    <div className="min-h-screen bg-(--background) text-(--foreground)">
+      <Sidebar
+        isOpen={isSidebarOpen}
+        onNavigate={() => setIsSidebarOpen(false)}
+      />
 
-      <Sidebar isOpen={sidebarOpen} onNavigate={closeSidebar} />
+      <div className="flex flex-col min-h-screen transition-all duration-300 md:pl-[240px]">
+        <Topbar onMenuClick={() => setIsSidebarOpen((prev) => !prev)} />
 
-      <div className="flex min-w-0 flex-1 flex-col">
-        <Topbar title={title} onMenuClick={openSidebar} />
-
-        <main className="mx-auto w-full max-w-6xl min-w-0 flex-1 overflow-x-hidden p-3 sm:p-4 md:p-6">
+        <main className="flex-1 p-4 sm:p-6 lg:p-8">
           {children}
         </main>
       </div>
