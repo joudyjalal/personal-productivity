@@ -5,9 +5,9 @@ import { Card, CardContent } from "@/components/ui/card";
 const initialCategories = ["Project", "English", "Data", "Ideas", "Personal"];
 
 const initialNotes: Record<string, string> = {
-  Project: "• Build portfolio website\nFinish UI design",
-  English: "• Practice listening 20 mins daily\nRead 2 articles",
-  Data: "• 💡 Ideas for this week:\n\nBuild portfolio website\nComplete Python Pandas course\n\nRemember:",
+  Project: "• Build portfolio website\n•Finish UI design",
+  English: "• Practice listening 20 mins daily\n•Read 2 articles",
+  Data: "• 💡 Ideas for this week:\n\n•Build portfolio website\n•Complete Python Pandas course\n\nRemember:",
   Ideas: "• New SaaS dashboard concept\n",
   Personal: "• Grocery shopping\nGym schedule",
 };
