@@ -21,7 +21,7 @@ export default function Sleep() {
         console.error(e);
       }
     }
-    // سجلات افتراضية تبدأ من الأيام القريبة لغاية تاريخ اليوم 2026-10-14
+    
     return [
       { date: "2026-10-09", hours: 7.0, quality: "Good", bedtime: "23:00", waketime: "06:00" },
       { date: "2026-10-10", hours: 6.5, quality: "Good", bedtime: "23:30", waketime: "06:00" },
@@ -102,7 +102,7 @@ export default function Sleep() {
 
     const todayStr = new Date().toISOString().split("T")[0];
     
-    // التحقق إذا كان هناك سجل لنفس اليوم لتحديثه أو إضافته كجديد
+    
     const newRecord: SleepRecord = {
       date: todayStr,
       hours: parseFloat(hoursInput) || 0,
