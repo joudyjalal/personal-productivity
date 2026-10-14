@@ -21,14 +21,14 @@ export default function Sleep() {
         console.error(e);
       }
     }
+    // سجلات افتراضية تبدأ من الأيام القريبة لغاية تاريخ اليوم 2026-10-14
     return [
-      { date: "2026-10-08", hours: 6.5, quality: "Good", bedtime: "23:00", waketime: "06:30" },
-      { date: "2026-10-09", hours: 7.5, quality: "Good", bedtime: "23:30", waketime: "07:00" },
-      { date: "2026-10-10", hours: 5.5, quality: "Poor", bedtime: "01:00", waketime: "06:30" },
-      { date: "2026-10-11", hours: 8.0, quality: "Great", bedtime: "22:30", waketime: "06:30" },
-      { date: "2026-10-12", hours: 7.5, quality: "Good", bedtime: "23:00", waketime: "06:30" },
-      { date: "2026-10-13", hours: 6.0, quality: "Poor", bedtime: "00:30", waketime: "06:30" },
-      { date: "2026-10-14", hours: 7.5, quality: "Good", bedtime: "23:15", waketime: "06:45" },
+      { date: "2026-10-09", hours: 7.0, quality: "Good", bedtime: "23:00", waketime: "06:00" },
+      { date: "2026-10-10", hours: 6.5, quality: "Good", bedtime: "23:30", waketime: "06:00" },
+      { date: "2026-10-11", hours: 5.5, quality: "Poor", bedtime: "01:00", waketime: "06:30" },
+      { date: "2026-10-12", hours: 8.0, quality: "Great", bedtime: "22:30", waketime: "06:30" },
+      { date: "2026-10-13", hours: 7.5, quality: "Good", bedtime: "23:00", waketime: "06:30" },
+      { date: "2026-10-14", hours: 7.5, quality: "Good", bedtime: "23:00", waketime: "06:30" },
     ];
   });
 
@@ -38,7 +38,6 @@ export default function Sleep() {
   const [hoursInput, setHoursInput] = useState("0");
   const [qualityError, setQualityError] = useState(false);
 
-  // دالة حساب الساعات التلقائية
   const calculateSleepDuration = (start: string, end: string) => {
     if (!start || !end) return;
 
@@ -48,15 +47,12 @@ export default function Sleep() {
     let startMinutes = startH * 60 + startM;
     let endMinutes = endH * 60 + endM;
 
-    // التعامل مع الانتقال لليوم التالي (إذا كان وقت الاستيقاظ قبل وقت النوم)
     if (endMinutes <= startMinutes) {
       endMinutes += 24 * 60;
     }
 
     const diffMinutes = endMinutes - startMinutes;
     const rawHours = diffMinutes / 60;
-    
-    // تقريب الناتج لأقرب 0.5 (مثل 7.5)
     const roundedHours = Math.round(rawHours * 2) / 2;
 
     setHoursInput(roundedHours.toString());
@@ -104,15 +100,21 @@ export default function Sleep() {
     }
     setQualityError(false);
 
+    const todayStr = new Date().toISOString().split("T")[0];
+    
+    // التحقق إذا كان هناك سجل لنفس اليوم لتحديثه أو إضافته كجديد
     const newRecord: SleepRecord = {
-      date: new Date().toISOString().split("T")[0],
+      date: todayStr,
       hours: parseFloat(hoursInput) || 0,
       quality,
       bedtime,
       waketime,
     };
 
-    setRecords((prev) => [...prev, newRecord]);
+    setRecords((prev) => {
+      const filtered = prev.filter(r => r.date !== todayStr);
+      return [...filtered, newRecord];
+    });
 
     setHoursInput("0");
     setBedtime("");
@@ -179,15 +181,16 @@ export default function Sleep() {
               <span className="text-xs text-(--muted-foreground)">Last {records.length} entries</span>
             </div>
 
-            <div className="h-48 flex items-end gap-3 pt-6 px-2 border-b border-(--border)">
+            <div className="h-48 flex items-end gap-3 pt-8 px-2 border-b border-(--border)">
               {records.slice(-14).map((rec, idx) => {
                 const heightPercent = Math.min(Math.max((rec.hours / 10) * 100, 20), 100);
                 const barColor = rec.hours >= 7.5 ? "bg-(--primary)" : rec.hours >= 6 ? "bg-amber-300" : "bg-rose-500";
 
                 return (
-                  <div key={idx} className="flex-1 flex flex-col items-center gap-2 h-full justify-end group relative">
-                    <div className="absolute -top-8 bg-(--background) border border-(--border) px-2 py-1 rounded text-[10px] text-(--foreground) opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
-                      {rec.hours}h ({rec.quality})
+                  <div key={idx} className="flex-1 flex flex-col items-center gap-2 h-full justify-end group relative cursor-pointer">
+                    {/* Tooltip يظهر عند المرور أو الضغط على العمود */}
+                    <div className="absolute -top-10 bg-(--background) border border-(--border) px-2.5 py-1 rounded-md text-[11px] font-semibold text-(--foreground) opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-md z-20 pointer-events-none">
+                      {rec.hours}h ({rec.quality}) - {rec.date}
                     </div>
                     <div 
                       style={{ height: `${heightPercent}%` }} 
