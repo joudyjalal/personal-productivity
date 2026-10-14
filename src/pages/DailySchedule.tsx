@@ -14,7 +14,7 @@ const initialSchedule: ScheduleItem[] = [
     id: "1",
     time: "09:00-09:15",
     icon: "🙏",
-    title: "Morning Prayer & Planning",
+    title: "Planning",
     completed: false,
   },
   {
