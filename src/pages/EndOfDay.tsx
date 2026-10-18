@@ -98,7 +98,7 @@ export default function EndOfDay() {
 
       <Card className="bg-(--surface) border-(--border)">
         <CardContent className="p-6 space-y-4">
-          <span className="text-xs uppercase tracking-wider font-semibold text-amber-500 block">
+          <span className="text-xs uppercase tracking-wider font-semibold text-(--primary) block">
             DAILY CHECK-IN
           </span>
 
@@ -110,7 +110,7 @@ export default function EndOfDay() {
                 className="flex items-center gap-3 p-3.5 rounded-xl border border-(--border) bg-(--background)/40 hover:bg-(--background) cursor-pointer transition-all"
               >
                 {item.completed ? (
-                  <CheckCircle2 className="w-5 h-5 text-amber-400 shrink-0" />
+                  <CheckCircle2 className="w-5 h-5 text-(--primary) shrink-0" />
                 ) : (
                   <Circle className="w-5 h-5 text-(--muted-foreground) shrink-0" />
                 )}
@@ -129,8 +129,7 @@ export default function EndOfDay() {
 
           <div className="flex justify-between items-center pt-2 text-xs text-(--muted-foreground)">
             <span>Check-in score</span>
-            {/* تم جعل القيمة الكلية ديناميكية بناءً على عدد العناصر */}
-            <span className="font-bold text-amber-400">
+            <span className="font-bold text-(--primary)">
               {completedCount}/{checkItems.length}
             </span>
           </div>
@@ -139,12 +138,12 @@ export default function EndOfDay() {
 
       <Card className="bg-(--surface) border-(--border)">
         <CardContent className="p-6 space-y-3">
-          <span className="text-xs uppercase tracking-wider font-semibold text-amber-500 block">
+          <span className="text-xs uppercase tracking-wider font-semibold text-(--primary) block">
             TASK PROGRESS SUMMARY
           </span>
 
           <div className="flex items-baseline gap-4 pt-1">
-            <span className="text-4xl font-extrabold text-amber-400">
+            <span className="text-4xl font-extrabold text-(--primary)">
               {taskStats.percentage}%
             </span>
             <div>
@@ -161,7 +160,7 @@ export default function EndOfDay() {
 
       <Card className="bg-(--surface) border-(--border)">
         <CardContent className="p-6 space-y-3">
-          <span className="text-xs uppercase tracking-wider font-semibold text-amber-500 block">
+          <span className="text-xs uppercase tracking-wider font-semibold text-(--primary) block">
             WHAT CAN I IMPROVE TOMORROW?
           </span>
 
@@ -176,7 +175,7 @@ export default function EndOfDay() {
 
       <Card className="bg-(--surface) border-(--border) text-center p-8">
         <CardContent className="space-y-3 flex flex-col items-center">
-          <Star className="w-6 h-6 text-amber-400 fill-amber-400" />
+          <Star className="w-6 h-6 text-amber-300 fill-amber-300" />
           <blockquote className="text-lg font-bold text-(--foreground) max-w-xl">
             "Well done. Rest today and rise stronger tomorrow."
           </blockquote>
