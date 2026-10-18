@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Moon, Star, CheckCircle2, Circle } from "lucide-react";
 
-interface CheckItem {
+type CheckItem= {
   id: string;
   label: string;
   completed: boolean;
