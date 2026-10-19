@@ -6,7 +6,6 @@ import Dashboard from "@/pages/Dashboard";
 import Sleep from "@/pages/Sleep"
 import DailySchedule from "@/pages/DailySchedule";
 import Goals from "@/pages/Goals";
-import Statistics from "@/pages/Statistics";
 import Notes from "@/pages/Notes";
 import EndOfDay from "@/pages/EndOfDay";
 import Login from "@/pages/auth/Login";
@@ -27,7 +26,6 @@ function App() {
                   <Route path="/" element={<Dashboard />} />
                   <Route path="/schedule" element={<DailySchedule />} />
                   <Route path="/goals" element={<Goals />} />
-                  <Route path="/stats" element={<Statistics />} />
                   <Route path="/notes" element={<Notes />} />
                   <Route path="/sleep" element={<Sleep />} />
                   <Route path="/eod" element={<EndOfDay />} />
