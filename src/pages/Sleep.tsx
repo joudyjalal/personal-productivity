@@ -2,16 +2,30 @@ import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { TrendingUp, Lightbulb } from "lucide-react";
+import { translations } from "@/lib/utlis/translation";
 
-type SleepRecord ={
+type SleepRecord = {
   date: string;
   hours: number;
   quality: "Poor" | "Good" | "Great";
   bedtime: string;
   waketime: string;
-}
+};
 
 export default function Sleep() {
+  const currentLang = (localStorage.getItem("life_os_language") as "en" | "ar") || "en";
+  const t = translations[currentLang];
+
+  // منطق التحية التلقائية حسب الوقت الحالي
+  const now = new Date();
+  const hour = now.getHours();
+  let dynamicGreeting = t.goodMorning;
+  if (hour >= 12 && hour < 18) {
+    dynamicGreeting = t.goodAfternoon;
+  } else if (hour >= 18) {
+    dynamicGreeting = t.goodEvening;
+  }
+
   const [records, setRecords] = useState<SleepRecord[]>(() => {
     const saved = localStorage.getItem("life_os_sleep_records");
     if (saved) {
@@ -83,7 +97,6 @@ export default function Sleep() {
     ? (records.reduce((acc, curr) => acc + curr.hours, 0) / records.length).toFixed(1) 
     : "0";
 
-
   const currentStreak = records.filter(r => r.hours >= 7).length;
 
   const handleSaveEntry = (e: React.FormEvent) => {
@@ -96,11 +109,10 @@ export default function Sleep() {
 
     const todayStr = new Date().toISOString().split("T")[0];
     
-    
     const newRecord: SleepRecord = {
       date: todayStr,
       hours: parseFloat(hoursInput) || 0,
-      quality,
+      quality: quality as "Poor" | "Good" | "Great",
       bedtime,
       waketime,
     };
@@ -116,13 +128,20 @@ export default function Sleep() {
     setQuality("");
   };
 
+  const getLocalizedQuality = (q: string) => {
+    if (q === "Poor") return t.poorQuality;
+    if (q === "Good") return t.goodQuality;
+    if (q === "Great") return t.greatQuality;
+    return q;
+  };
+
   return (
     <div className="space-y-6 max-w-5xl mx-auto pb-10 px-2 sm:px-0">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div>
-          <h2 className="text-xl font-bold text-(--foreground)">Sleep</h2>
+          <h2 className="text-xl font-bold text-(--foreground)">{t.sleepTitle}</h2>
           <p className="text-xs text-(--muted-foreground)">
-            Good afternoon
+            {dynamicGreeting}
           </p>
         </div>
       </div>
@@ -130,39 +149,39 @@ export default function Sleep() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card className="bg-(--surface) border-(--border)">
           <CardContent className="p-5 space-y-2">
-            <span className="text-xs text-(--muted-foreground) uppercase tracking-wider font-semibold">LAST NIGHT</span>
+            <span className="text-xs text-(--muted-foreground) uppercase tracking-wider font-semibold">{t.lastNightLabel}</span>
             <div className="text-2xl font-bold text-(--foreground)">
               {Math.floor(lastNight.hours)}h {Math.round((lastNight.hours % 1) * 60)}m
             </div>
             <p className="text-xs text-(--muted-foreground)">
-              Quality: <span className="text-(--primary) font-medium">{lastNight.quality}</span> - Goal: 8h
+              {t.qualityText} <span className="text-(--primary) font-medium">{getLocalizedQuality(lastNight.quality)}</span> | {t.goalText}
             </p>
           </CardContent>
         </Card>
 
         <Card className="bg-(--surface) border-(--border)">
           <CardContent className="p-5 space-y-2">
-            <span className="text-xs text-(--muted-foreground) uppercase tracking-wider font-semibold">7-day average</span>
+            <span className="text-xs text-(--muted-foreground) uppercase tracking-wider font-semibold">{t.avg7DaysLabel}</span>
             <div className="text-2xl font-bold text-(--foreground)">{avg7Days}h</div>
             <p className="text-xs text-(--primary) font-medium flex items-center gap-1">
-              <TrendingUp className="w-3.5 h-3.5" /> On target
+              <TrendingUp className="w-3.5 h-3.5 rtl:rotate-180" /> {t.onTarget}
             </p>
           </CardContent>
         </Card>
 
         <Card className="bg-(--surface) border-(--border)">
           <CardContent className="p-5 space-y-2">
-            <span className="text-xs text-(--muted-foreground) uppercase tracking-wider font-semibold">30-day average</span>
+            <span className="text-xs text-(--muted-foreground) uppercase tracking-wider font-semibold">{t.avg30DaysLabel}</span>
             <div className="text-2xl font-bold text-(--foreground)">{avg30Days}h</div>
-            <p className="text-xs text-(--muted-foreground)">Consistent routine</p>
+            <p className="text-xs text-(--muted-foreground)">{t.consistentRoutine}</p>
           </CardContent>
         </Card>
 
         <Card className="bg-(--surface) border-(--border)">
           <CardContent className="p-5 space-y-2">
-            <span className="text-xs text-(--muted-foreground) uppercase tracking-wider font-semibold">Best streak (7h+)</span>
+            <span className="text-xs text-(--muted-foreground) uppercase tracking-wider font-semibold">{t.bestStreakLabel}</span>
             <div className="text-2xl font-bold text-(--foreground)">{currentStreak}d</div>
-            <p className="text-xs text-(--muted-foreground)">Keep it going!</p>
+            <p className="text-xs text-(--muted-foreground)">{t.keepItGoing}</p>
           </CardContent>
         </Card>
       </div>
@@ -171,8 +190,8 @@ export default function Sleep() {
         <Card className="lg:col-span-2 bg-(--surface) border-(--border)">
           <CardContent className="p-6 space-y-6">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold text-(--foreground)">Recent Nights Overview</h3>
-              <span className="text-xs text-(--muted-foreground)">Last {records.length} entries</span>
+              <h3 className="text-sm font-bold text-(--foreground)">{t.recentNightsOverview}</h3>
+              <span className="text-xs text-(--muted-foreground)">{records.length} {t.lastEntriesText}</span>
             </div>
 
             <div className="h-48 flex items-end gap-3 pt-8 px-2 border-b border-(--border)">
@@ -182,9 +201,8 @@ export default function Sleep() {
 
                 return (
                   <div key={idx} className="flex-1 flex flex-col items-center gap-2 h-full justify-end group relative cursor-pointer">
-                   
                     <div className="absolute -top-10 bg-(--background) border border-(--border) px-2.5 py-1 rounded-md text-[11px] font-semibold text-(--foreground) opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-md z-20 pointer-events-none">
-                      {rec.hours}h ({rec.quality}) - {rec.date}
+                      {rec.hours}h ({getLocalizedQuality(rec.quality)}) - {rec.date}
                     </div>
                     <div 
                       style={{ height: `${heightPercent}%` }} 
@@ -198,13 +216,13 @@ export default function Sleep() {
 
             <div className="flex items-center gap-4 text-xs text-(--muted-foreground)">
               <div className="flex items-center gap-1.5">
-                <span className="w-3 h-3 rounded-sm bg-(--primary) inline-block"></span> 7h+ (Optimal)
+                <span className="w-3 h-3 rounded-sm bg-(--primary) inline-block"></span> {t.optimalLegend}
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="w-3 h-3 rounded-sm bg-amber-300 inline-block"></span> 6-7h (Fair)
+                <span className="w-3 h-3 rounded-sm bg-amber-300 inline-block"></span> {t.fairLegend}
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="w-3 h-3 rounded-sm bg-rose-500 inline-block"></span> Under 6h (Low)
+                <span className="w-3 h-3 rounded-sm bg-rose-500 inline-block"></span> {t.lowLegend}
               </div>
             </div>
           </CardContent>
@@ -213,11 +231,11 @@ export default function Sleep() {
         <Card className="bg-(--surface) border-(--border)">
           <CardContent className="p-6">
             <form onSubmit={handleSaveEntry} className="space-y-5">
-              <h3 className="text-sm font-bold text-(--foreground)">Quick Log</h3>
+              <h3 className="text-sm font-bold text-(--foreground)">{t.quickLog}</h3>
               
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-medium text-(--muted-foreground)">Bedtime</label>
+                  <label className="text-xs font-medium text-(--muted-foreground)">{t.bedtimeLabel}</label>
                   <input
                     type="time"
                     value={bedtime}
@@ -227,7 +245,7 @@ export default function Sleep() {
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-xs font-medium text-(--muted-foreground)">Wake time</label>
+                  <label className="text-xs font-medium text-(--muted-foreground)">{t.waketimeLabel}</label>
                   <input
                     type="time"
                     value={waketime}
@@ -239,7 +257,7 @@ export default function Sleep() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-(--muted-foreground)">Hours Slept (Auto)</label>
+                <label className="text-xs font-medium text-(--muted-foreground)">{t.hoursSleptLabel}</label>
                 <input
                   type="number"
                   step="0.5"
@@ -253,7 +271,7 @@ export default function Sleep() {
               </div>
 
               <div className="space-y-2 pt-1">
-                <label className="text-xs font-medium text-(--foreground) block">Quality</label>
+                <label className="text-xs font-medium text-(--foreground) block">{t.qualityLabel}</label>
                 <div className="grid grid-cols-3 gap-2">
                   {(["Poor", "Good", "Great"] as const).map((q) => (
                     <Button
@@ -266,17 +284,17 @@ export default function Sleep() {
                       }}
                       className="text-xs h-10 rounded-xl font-medium"
                     >
-                      {q}
+                      {getLocalizedQuality(q)}
                     </Button>
                   ))}
                 </div>
                 {qualityError && (
-                  <p className="text-xs text-rose-500 font-medium pt-1">Please select sleep quality</p>
+                  <p className="text-xs text-rose-500 font-medium pt-1">{t.qualityErrorText}</p>
                 )}
               </div>
 
               <Button type="submit" className="w-full mt-3 rounded-xl text-xs font-semibold h-10">
-                Save Entry
+                {t.saveEntryBtn}
               </Button>
             </form>
           </CardContent>
@@ -287,14 +305,14 @@ export default function Sleep() {
         <CardContent className="p-6 space-y-3">
           <h3 className="text-sm font-bold text-(--foreground) flex items-center gap-2">
             <Lightbulb className="w-4 h-4 text-amber-300" />
-            Sleep Insights
+            {t.sleepInsights}
           </h3>
           <div className="space-y-2 text-xs text-(--muted-foreground)">
             <div className="flex items-center gap-2 p-2.5 rounded-lg bg-(--background)/50 border border-(--border)">
-              <span className="text-(--primary) font-medium">Pattern:</span> You maintain a stable sleep schedule during weekdays.
+              {t.insightPattern}
             </div>
             <div className="flex items-center gap-2 p-2.5 rounded-lg bg-(--background)/50 border border-(--border)">
-              <span className="text-amber-300 font-medium">Heads up:</span> Nights with under 6h sleep correlate with lower task completion rates.
+              {t.insightHeadsUp}
             </div>
           </div>
         </CardContent>

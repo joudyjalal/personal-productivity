@@ -11,9 +11,13 @@ import {
   Sun,
   Clock,
 } from "lucide-react";
+import { translations } from "@/lib/utlis/translation";
 
 export function Dashboard() {
-  const [greeting, setGreeting] = useState("Good Day");
+  const currentLang = (localStorage.getItem("life_os_language") as "en" | "ar") || "en";
+  const t = translations[currentLang];
+
+  const [greeting, setGreeting] = useState("");
   const [todayStr, setTodayStr] = useState("");
 
   const [scheduleStats, setScheduleStats] = useState({
@@ -29,20 +33,18 @@ export function Dashboard() {
   });
 
   const [notesCount, setNotesCount] = useState(0);
-
   const [sleepHours, setSleepHours] = useState<string | null>(null);
-
   const [checkinScore, setCheckinScore] = useState<string | null>(null);
 
   useEffect(() => {
     const now = new Date();
     const hour = now.getHours();
-    if (hour < 12) setGreeting("Good Morning");
-    else if (hour < 18) setGreeting("Good Afternoon");
-    else setGreeting("Good Evening");
+    if (hour < 12) setGreeting(t.goodMorning);
+    else if (hour < 18) setGreeting(t.goodAfternoon);
+    else setGreeting(t.goodEvening);
 
     setTodayStr(
-      now.toLocaleDateString("en-US", {
+      now.toLocaleDateString(currentLang === "ar" ? "ar-SA" : "en-US", {
         weekday: "long",
         year: "numeric",
         month: "long",
@@ -131,7 +133,7 @@ export function Dashboard() {
         console.error(e);
       }
     }
-  }, []);
+  }, [currentLang]);
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto pb-10 px-2 sm:px-0">
@@ -155,15 +157,15 @@ export function Dashboard() {
                 {scheduleStats.percentage}%
               </span>
               <p className="text-[11px] text-(--muted-foreground)">
-                Today's Progress
+                {t.todaysProgress}
               </p>
             </div>
             <Link
               to="/schedule"
               className="btn btn-primary text-xs py-2.5 px-4 flex items-center gap-2 rounded-xl"
             >
-              <span>View Schedule</span>
-              <ArrowRight className="w-4 h-4" />
+              <span>{t.viewSchedule}</span>
+              <ArrowRight className="w-4 h-4 rtl:rotate-180" />
             </Link>
           </div>
         </div>
@@ -173,7 +175,7 @@ export function Dashboard() {
         <Card className="bg-(--surface) border-(--border) p-5 hover:border-(--primary) transition-all">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-semibold text-(--muted-foreground) uppercase">
-              Schedule
+              {t.schedule}
             </span>
             <Calendar className="w-5 h-5 text-(--primary)" />
           </div>
@@ -182,7 +184,7 @@ export function Dashboard() {
               {scheduleStats.completed}/{scheduleStats.total}
             </p>
             <p className="text-xs text-(--muted-foreground)">
-              Tasks Completed Today
+              {t.tasksCompletedToday}
             </p>
           </div>
         </Card>
@@ -190,7 +192,7 @@ export function Dashboard() {
         <Card className="bg-(--surface) border-(--border) p-5 hover:border-(--primary) transition-all">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-semibold text-(--muted-foreground) uppercase">
-              Goals
+              {t.goals}
             </span>
             <Target className="w-5 h-5 text-(--primary)" />
           </div>
@@ -199,7 +201,7 @@ export function Dashboard() {
               {goalsStats.completed}/{goalsStats.total}
             </p>
             <p className="text-xs text-(--muted-foreground)">
-              Active Goals Achieved
+              {t.activeGoalsAchieved}
             </p>
           </div>
         </Card>
@@ -207,7 +209,7 @@ export function Dashboard() {
         <Card className="bg-(--surface) border-(--border) p-5 hover:border-(--primary) transition-all">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-semibold text-(--muted-foreground) uppercase">
-              Notes
+              {t.notes}
             </span>
             <FileText className="w-5 h-5 text-(--primary)" />
           </div>
@@ -216,7 +218,7 @@ export function Dashboard() {
               {notesCount}
             </p>
             <p className="text-xs text-(--muted-foreground)">
-              Categories & Notes
+              {t.categoriesAndNotes}
             </p>
           </div>
         </Card>
@@ -224,16 +226,16 @@ export function Dashboard() {
         <Card className="bg-(--surface) border-(--border) p-5 hover:border-(--primary) transition-all">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-semibold text-(--muted-foreground) uppercase">
-              Sleep & Review
+              {t.sleepAndReview}
             </span>
             <Moon className="w-5 h-5 text-(--primary)" />
           </div>
           <div className="space-y-1">
             <p className="text-xl font-bold text-(--foreground)">
-              {sleepHours ? `${sleepHours} hrs` : "Not set"}
+              {sleepHours ? `${sleepHours} hrs` : t.notSet}
             </p>
             <p className="text-xs text-(--muted-foreground)">
-              Check-in: {checkinScore || "Pending"}
+              {t.checkIn}: {checkinScore || t.pending}
             </p>
           </div>
         </Card>
@@ -245,22 +247,22 @@ export function Dashboard() {
             <div className="flex items-center gap-2">
               <Clock className="w-4 h-4 text-(--primary)" />
               <span className="text-xs font-bold uppercase tracking-wider text-(--primary)">
-                SCHEDULE PREVIEW
+                {t.schedulePreview}
               </span>
             </div>
             <Link
               to="/schedule"
               className="text-xs font-semibold text-(--primary) hover:underline flex items-center gap-1"
             >
-              <span>View All</span>
-              <ArrowRight className="w-3 h-3" />
+              <span>{t.viewAll}</span>
+              <ArrowRight className="w-3 h-3 rtl:rotate-180" />
             </Link>
           </div>
 
           <div className="space-y-2.5">
             {scheduleStats.recentTasks.length === 0 ? (
               <p className="text-xs text-(--muted-foreground) py-4 text-center">
-                No tasks found in your schedule. Add tasks in Daily Schedule!
+                {t.noTasksFound}
               </p>
             ) : (
               scheduleStats.recentTasks.map((task) => (

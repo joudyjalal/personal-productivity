@@ -1,15 +1,19 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Moon, Star, CheckCircle2, Circle } from "lucide-react";
+import { translations } from "@/lib/utlis/translation";
 
 type CheckItem = {
   id: string;
-  label: string;
+  labelKey: "checkStudy" | "checkEarn" | "checkHelp";
   completed: boolean;
 };
 
 export default function EndOfDay() {
-  const todayStr = new Date().toLocaleDateString("en-US", {
+  const currentLang = (localStorage.getItem("life_os_language") as "en" | "ar") || "en";
+  const t = translations[currentLang];
+
+  const todayStr = new Date().toLocaleDateString(currentLang === "ar" ? "ar-SA" : "en-US", {
     weekday: "long",
     year: "numeric",
     month: "long",
@@ -20,15 +24,22 @@ export default function EndOfDay() {
     const saved = localStorage.getItem("life_os_endofday_checkins");
     if (saved) {
       try {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed.map((item: any) => ({
+            id: item.id,
+            labelKey: item.labelKey || (item.id === "study" ? "checkStudy" : item.id === "earn" ? "checkEarn" : "checkHelp"),
+            completed: item.completed ?? false,
+          }));
+        }
       } catch (e) {
         console.error(e);
       }
     }
     return [
-      { id: "study", label: "Did I study something new?", completed: false },
-      { id: "earn", label: "Did I work on earning money?", completed: false },
-      { id: "help", label: "Did I help someone today?", completed: false },
+      { id: "study", labelKey: "checkStudy", completed: false },
+      { id: "earn", labelKey: "checkEarn", completed: false },
+      { id: "help", labelKey: "checkHelp", completed: false },
     ];
   });
 
@@ -90,7 +101,7 @@ export default function EndOfDay() {
         <div className="space-y-2">
           <Moon className="w-8 h-8 text-amber-300 mb-2" />
           <h1 className="text-3xl font-bold text-(--foreground) tracking-tight">
-            End of Day Review
+            {t.endOfDayTitle}
           </h1>
           <p className="text-sm text-(--muted-foreground)">{todayStr}</p>
         </div>
@@ -99,7 +110,7 @@ export default function EndOfDay() {
       <Card className="bg-(--surface) border-(--border)">
         <CardContent className="p-6 space-y-4">
           <span className="text-xs uppercase tracking-wider font-semibold text-(--primary) block">
-            DAILY CHECK-IN
+            {t.dailyCheckIn}
           </span>
 
           <div className="space-y-3">
@@ -121,14 +132,14 @@ export default function EndOfDay() {
                       : "text-(--foreground)"
                   }`}
                 >
-                  {item.label}
+                  {t[item.labelKey]}
                 </span>
               </div>
             ))}
           </div>
 
           <div className="flex justify-between items-center pt-2 text-xs text-(--muted-foreground)">
-            <span>Check-in score</span>
+            <span>{t.checkInScore}</span>
             <span className="font-bold text-(--primary)">
               {completedCount}/{checkItems.length}
             </span>
@@ -139,7 +150,7 @@ export default function EndOfDay() {
       <Card className="bg-(--surface) border-(--border)">
         <CardContent className="p-6 space-y-3">
           <span className="text-xs uppercase tracking-wider font-semibold text-(--primary) block">
-            TASK PROGRESS SUMMARY
+            {t.taskProgressSummary}
           </span>
 
           <div className="flex items-baseline gap-4 pt-1">
@@ -148,10 +159,10 @@ export default function EndOfDay() {
             </span>
             <div>
               <p className="text-sm font-semibold text-(--foreground)">
-                {taskStats.completed} tasks completed
+                {taskStats.completed} {t.tasksCompletedText}
               </p>
               <p className="text-xs text-(--muted-foreground)">
-                {taskStats.remaining} remaining
+                {taskStats.remaining} {t.remainingText}
               </p>
             </div>
           </div>
@@ -161,13 +172,13 @@ export default function EndOfDay() {
       <Card className="bg-(--surface) border-(--border)">
         <CardContent className="p-6 space-y-3">
           <span className="text-xs uppercase tracking-wider font-semibold text-(--primary) block">
-            WHAT CAN I IMPROVE TOMORROW?
+            {t.improveTomorrow}
           </span>
 
           <textarea
             value={reflection}
             onChange={(e) => setReflection(e.target.value)}
-            placeholder="Reflect on today... What would you do differently tomorrow? What worked well?"
+            placeholder={t.reflectionPlaceholder}
             className="w-full h-32 p-4 rounded-xl border border-(--border) bg-(--background)/50 text-(--foreground) text-sm focus:outline-none resize-none"
           />
         </CardContent>
@@ -177,7 +188,7 @@ export default function EndOfDay() {
         <CardContent className="space-y-3 flex flex-col items-center">
           <Star className="w-6 h-6 text-amber-300 fill-amber-300" />
           <blockquote className="text-lg font-bold text-(--foreground) max-w-xl">
-            "Well done. Rest today and rise stronger tomorrow."
+            {t.quoteText}
           </blockquote>
         </CardContent>
       </Card>

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Check, Plus, X, Trash2 } from "lucide-react";
+import { translations } from "@/lib/utlis/translation";
 
 type GoalItem = {
   id: string;
@@ -14,6 +15,10 @@ const initialGoals: GoalItem[] = [
 ];
 
 export function Goals() {
+  const currentLang =
+    (localStorage.getItem("life_os_language") as "en" | "ar") || "en";
+  const t = translations[currentLang];
+
   const [goals, setGoals] = useState<GoalItem[]>(() => {
     const saved = localStorage.getItem("weekly_goals_items");
     if (saved !== null) {
@@ -29,13 +34,15 @@ export function Goals() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newTitle, setNewTitle] = useState("");
 
-  
-  const currentDate = new Date().toLocaleDateString("en-US", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+  const currentDate = new Date().toLocaleDateString(
+    currentLang === "ar" ? "ar-SA" : "en-US",
+    {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    },
+  );
 
   useEffect(() => {
     localStorage.setItem("weekly_goals_items", JSON.stringify(goals));
@@ -76,33 +83,30 @@ export function Goals() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
         <div>
           <h2 className="text-lg sm:text-xl font-bold text-(--foreground)">
-            Goals
+            {t.goalsTitle}
           </h2>
-        
-          <p className="text-xs text-(--muted-foreground)">
-            {currentDate}
-          </p>
+          <p className="text-xs text-(--muted-foreground)">{currentDate}</p>
         </div>
         <button
           onClick={() => setIsModalOpen(true)}
           className="btn btn-primary text-xs py-2 px-3.5 flex items-center justify-center gap-1.5 w-full sm:w-auto"
         >
           <Plus className="w-4 h-4" />
-          <span>Add Goal</span>
+          <span>{t.addGoal}</span>
         </button>
       </div>
 
       <div className="card p-4 sm:p-6 rounded-(--radius-lg) border border-(--border) bg-(--surface) shadow-(--shadow-sm)">
         <div className="flex items-center justify-between mb-4 sm:mb-6">
           <span className="text-xs font-bold uppercase tracking-wider text-(--primary)">
-            Weekly Goals
+            {t.weeklyGoals}
           </span>
           <div className="text-right">
             <span className="text-xl sm:text-2xl font-extrabold text-(--primary)">
               {progressPercentage}%
             </span>
             <span className="block text-[10px] sm:text-xs text-(--muted-foreground)">
-              {completedCount}/{goals.length} done
+              {completedCount}/{goals.length} {t.done}
             </span>
           </div>
         </div>
@@ -110,7 +114,7 @@ export function Goals() {
         <div className="space-y-2.5 sm:space-y-3">
           {goals.length === 0 ? (
             <p className="text-center text-xs text-(--muted-foreground) py-6">
-              No goals available. Add a new goal using the button above.
+              {t.noGoalsFound}
             </p>
           ) : (
             goals.map((goal) => (
@@ -151,7 +155,7 @@ export function Goals() {
                   <button
                     onClick={(e) => handleDeleteGoal(goal.id, e)}
                     className="p-1.5 rounded-(--radius) text-(--muted-foreground) hover:text-red-500 hover:bg-(--surface) transition-colors opacity-80 sm:opacity-60 group-hover:opacity-100"
-                    title="Delete goal"
+                    title={t.deleteGoal}
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -174,7 +178,7 @@ export function Goals() {
           <div className="card w-full max-w-md p-4 sm:p-6 bg-(--surface) border border-(--border) shadow-xl rounded-(--radius-lg)">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-sm sm:text-base font-bold text-(--foreground)">
-                Add Weekly Goal
+                {t.addWeeklyGoal}
               </h3>
               <button
                 onClick={() => setIsModalOpen(false)}
@@ -187,13 +191,13 @@ export function Goals() {
             <form onSubmit={handleAddGoal} className="space-y-3 sm:space-y-4">
               <div>
                 <label className="block text-xs font-semibold text-(--muted-foreground) mb-1">
-                  Goal Title
+                  {t.goalTitle}
                 </label>
                 <input
                   type="text"
                   value={newTitle}
                   onChange={(e) => setNewTitle(e.target.value)}
-                  placeholder="Enter goal description..."
+                  placeholder={t.goalPlaceholder}
                   className="w-full text-sm"
                   required
                 />
@@ -205,13 +209,13 @@ export function Goals() {
                   onClick={() => setIsModalOpen(false)}
                   className="btn text-xs sm:text-sm py-2 px-3"
                 >
-                  Cancel
+                  {t.cancel}
                 </button>
                 <button
                   type="submit"
                   className="btn btn-primary text-xs sm:text-sm py-2 px-3"
                 >
-                  Save Goal
+                  {t.saveGoal}
                 </button>
               </div>
             </form>

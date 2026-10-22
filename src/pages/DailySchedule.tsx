@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Check, Plus, X, Trash2, Edit2 } from "lucide-react";
+import { translations } from "@/lib/utlis/translation";
 
 type ScheduleItem = {
   id: string;
@@ -62,6 +63,9 @@ const initialSchedule: ScheduleItem[] = [
 ];
 
 export function DailySchedule() {
+  const currentLang = (localStorage.getItem("life_os_language") as "en" | "ar") || "en";
+  const t = translations[currentLang];
+
   const [items, setItems] = useState<ScheduleItem[]>(() => {
     const saved = localStorage.getItem("daily_schedule_items");
     if (saved !== null) {
@@ -153,7 +157,7 @@ export function DailySchedule() {
       <div className="card p-4 sm:p-6 rounded-(--radius-lg) border border-(--border) bg-(--surface) shadow-(--shadow-sm)">
         <div className="flex items-center justify-between mb-3">
           <span className="text-xs font-bold uppercase tracking-wider text-(--primary)">
-            Daily Progress
+            {t.dailyProgress}
           </span>
           <span className="text-xl sm:text-2xl font-extrabold text-(--primary)">
             {progressPercentage}%
@@ -170,21 +174,21 @@ export function DailySchedule() {
       <div className="card p-4 sm:p-6 rounded-(--radius-lg) border border-(--border) bg-(--surface) shadow-(--shadow-sm)">
         <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <h3 className="text-xs font-bold uppercase tracking-wider text-(--primary)">
-            Daily Timetable
+            {t.dailyTimetable}
           </h3>
           <button
             onClick={handleOpenAddModal}
             className="btn btn-primary text-xs py-2 px-3.5 flex items-center justify-center gap-1.5 w-full sm:w-auto"
           >
             <Plus className="w-4 h-4" />
-            <span>Add Task</span>
+            <span>{t.addTask}</span>
           </button>
         </div>
 
         <div className="space-y-2">
           {items.length === 0 ? (
             <p className="text-center text-xs text-(--muted-foreground) py-6">
-              No tasks available. Add a new task using the button above.
+              {t.noTasksAvailable}
             </p>
           ) : (
             items.map((item) => (
@@ -237,14 +241,14 @@ export function DailySchedule() {
                   <button
                     onClick={(e) => handleEditClick(item, e)}
                     className="p-1.5 rounded-(--radius) text-(--muted-foreground) hover:text-(--primary) hover:bg-(--surface) transition-colors opacity-80 sm:opacity-60 group-hover:opacity-100"
-                    title="Edit task"
+                    title={t.editTaskTitle}
                   >
                     <Edit2 className="w-4 h-4" />
                   </button>
                   <button
                     onClick={(e) => handleDeleteTask(item.id, e)}
                     className="p-1.5 rounded-(--radius) text-(--muted-foreground) hover:text-red-500 hover:bg-(--surface) transition-colors opacity-80 sm:opacity-60 group-hover:opacity-100"
-                    title="Delete task"
+                    title={t.deleteTaskTitle}
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -260,7 +264,7 @@ export function DailySchedule() {
           <div className="card w-full max-w-md p-4 sm:p-6 bg-(--surface) border border-(--border) shadow-xl rounded-(--radius-lg)">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-sm sm:text-base font-bold text-(--foreground)">
-                {editingId ? "Edit Task" : "Add New Task"}
+                {editingId ? t.editTaskModal : t.addNewTaskModal}
               </h3>
               <button
                 onClick={() => setIsModalOpen(false)}
@@ -273,13 +277,13 @@ export function DailySchedule() {
             <form onSubmit={handleSaveTask} className="space-y-3 sm:space-y-4">
               <div>
                 <label className="block text-xs font-semibold text-(--muted-foreground) mb-1">
-                  Time
+                  {t.timeLabel}
                 </label>
                 <input
                   type="text"
                   value={newTime}
                   onChange={(e) => setNewTime(e.target.value)}
-                  placeholder="05:00–05:30"
+                  placeholder={t.timePlaceholder}
                   className="w-full text-sm"
                   required
                 />
@@ -287,13 +291,13 @@ export function DailySchedule() {
 
               <div>
                 <label className="block text-xs font-semibold text-(--muted-foreground) mb-1">
-                  Emoji Icon (Press Win + . to choose)
+                  {t.emojiLabel}
                 </label>
                 <input
                   type="text"
                   value={newIcon}
                   onChange={(e) => setNewIcon(e.target.value)}
-                  placeholder="📌"
+                  placeholder={t.emojiPlaceholder}
                   maxLength={4}
                   className="w-full text-sm"
                   required
@@ -302,13 +306,13 @@ export function DailySchedule() {
 
               <div>
                 <label className="block text-xs font-semibold text-(--muted-foreground) mb-1">
-                  Task Title
+                  {t.taskTitleLabel}
                 </label>
                 <input
                   type="text"
                   value={newTitle}
                   onChange={(e) => setNewTitle(e.target.value)}
-                  placeholder="Task description..."
+                  placeholder={t.taskPlaceholder}
                   className="w-full text-sm"
                   required
                 />
@@ -320,13 +324,13 @@ export function DailySchedule() {
                   onClick={() => setIsModalOpen(false)}
                   className="btn text-xs sm:text-sm py-2 px-3"
                 >
-                  Cancel
+                  {t.cancel}
                 </button>
                 <button
                   type="submit"
                   className="btn btn-primary text-xs sm:text-sm py-2 px-3"
                 >
-                  {editingId ? "Update Task" : "Save Task"}
+                  {editingId ? t.updateTask : t.saveTask}
                 </button>
               </div>
             </form>

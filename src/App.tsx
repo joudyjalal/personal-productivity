@@ -1,5 +1,6 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { Shell } from "@/components/layout/Shell";
 import Dashboard from "@/pages/Dashboard";
@@ -9,8 +10,13 @@ import Goals from "@/pages/Goals";
 import Notes from "@/pages/Notes";
 import EndOfDay from "@/pages/EndOfDay";
 import NotFound from "@/pages/NotFound";
-import Settings  from "@/pages/Setting";
+import Settings from "@/pages/Setting";
 function App() {
+  useEffect(() => {
+    const currentLang = localStorage.getItem("life_os_language") || "en";
+    document.documentElement.dir = currentLang === "ar" ? "rtl" : "ltr";
+    document.documentElement.lang = currentLang;
+  }, []);
   return (
     <ThemeProvider>
       <Router>
