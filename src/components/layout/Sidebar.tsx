@@ -18,6 +18,7 @@ type SidebarProps = {
 export function Sidebar({ isOpen, onNavigate }: SidebarProps) {
   const currentLang = (localStorage.getItem("life_os_language") as "en" | "ar") || "en";
   const t = translations[currentLang];
+  const isRtl = currentLang === "ar";
 
   const navItems = [
     { name: t.dashboard, path: "/", icon: LayoutDashboard },
@@ -29,16 +30,18 @@ export function Sidebar({ isOpen, onNavigate }: SidebarProps) {
     { name: t.settings, path: "/setting", icon: Settings },
   ];
 
+
+  const closedClass = isRtl ? "translate-x-full md:translate-x-0" : "-translate-x-full md:translate-x-0";
+
   return (
     <>
       {isOpen && (
         <div
           onClick={onNavigate}
-          className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm md:hidden"
+          className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm md:hidden cursor-pointer"
         />
       )}
 
-   
       <aside
         className={`
           fixed top-0 start-0 bottom-0 z-50
@@ -46,10 +49,9 @@ export function Sidebar({ isOpen, onNavigate }: SidebarProps) {
           border-e border-(--border) bg-(--surface) p-4 text-(--foreground)
           shadow-xl transition-transform duration-300 ease-in-out
           md:w-[240px] md:max-w-none md:translate-x-0 md:shadow-none
-          ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
+          ${isOpen ? "translate-x-0" : closedClass}
         `}
       >
-       
         <div className="mb-6 px-2 pt-1 md:mb-8 shrink-0">
           <h1 className="text-lg font-extrabold tracking-tight text-(--foreground)">
             {currentLang === "ar" ? "الروتين" : "Daily"}
@@ -90,3 +92,5 @@ export function Sidebar({ isOpen, onNavigate }: SidebarProps) {
     </>
   );
 }
+
+export default Sidebar;
