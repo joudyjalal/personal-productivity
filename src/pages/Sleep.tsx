@@ -161,7 +161,7 @@ export default function Sleep() {
   };
 
   return (
-    <div className="space-y-6 max-w-6xl ml-25 pb-10 px-2 sm:px-0">
+    <div className="space-y-6 max-w-6xl mx-auto pb-10 px-2 sm:px-0">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 ">
         <div>
           <h2 className="text-xl font-bold text-(--foreground)">Sleep</h2>
