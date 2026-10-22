@@ -11,7 +11,20 @@ import Notes from "@/pages/Notes";
 import EndOfDay from "@/pages/EndOfDay";
 import NotFound from "@/pages/NotFound";
 import Settings from "@/pages/Setting";
+import { customThemes, applyTheme } from "@/lib/utlis/theme.ts";
+
 function App() {
+  useEffect(() => {
+    const savedTheme = localStorage.getItem(
+      "life_os_custom_theme",
+    ) as keyof typeof customThemes;
+    const currentMode =
+      (localStorage.getItem("theme") as "light" | "dark") || "light";
+
+    if (savedTheme && customThemes[savedTheme]) {
+      applyTheme(savedTheme, currentMode);
+    }
+  }, []);
   useEffect(() => {
     const currentLang = localStorage.getItem("life_os_language") || "en";
     document.documentElement.dir = currentLang === "ar" ? "rtl" : "ltr";

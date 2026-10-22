@@ -85,7 +85,7 @@ export function Topbar({ title, onMenuClick }: TopbarProps) {
           {theme === "dark" ? (
             <Sun className="h-5 w-5 text-(--warning)" />
           ) : (
-            <Moon className="h-5 w-5 text-(--info)" />
+            <Moon className="h-5 w-5 text-(--primary)" />
           )}
         </Button>
       </div>

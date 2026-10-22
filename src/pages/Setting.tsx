@@ -1,14 +1,32 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Settings as SettingsIcon, Languages, Trash2, AlertTriangle } from "lucide-react";
+import { Settings as SettingsIcon, Languages, Trash2, AlertTriangle, Palette } from "lucide-react";
+import { useTheme } from "@/context/ThemeContext";
+import { customThemes, applyTheme } from "@/lib/utlis/theme.ts";
 
 export default function Setting() {
+  const { theme } = useTheme();
+
   const [language, setLanguage] = useState(() => {
     return localStorage.getItem("life_os_language") || "en";
   });
 
+  const [activeThemeKey, setActiveThemeKey] = useState<keyof typeof customThemes>(() => {
+    const saved = localStorage.getItem("life_os_custom_theme");
+    return saved && saved in customThemes ? (saved as keyof typeof customThemes) : "ocean";
+  });
+
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    applyTheme(activeThemeKey, theme as "light" | "dark");
+  }, [activeThemeKey, theme]);
+
+  const handleThemeChange = (key: keyof typeof customThemes) => {
+    setActiveThemeKey(key);
+    applyTheme(key, theme as "light" | "dark");
+  };
 
   const handleLanguageChange = (lang: string) => {
     setLanguage(lang);
@@ -44,6 +62,7 @@ export default function Setting() {
       </div>
 
       <div className="space-y-4">
+      
         <Card className="bg-(--surface) border-(--border)">
           <CardContent className="p-6 space-y-4">
             <div className="flex items-center gap-2">
@@ -78,6 +97,49 @@ export default function Setting() {
           </CardContent>
         </Card>
 
+   
+        <Card className="bg-(--surface) border-(--border)">
+          <CardContent className="p-6 space-y-4">
+            <div className="flex items-center gap-2">
+              <Palette className="w-5 h-5 text-(--primary)" />
+              <h3 className="text-sm font-bold text-(--foreground)">
+                {language === "ar" ? "ثيمات الألوان" : "Color Themes"}
+              </h3>
+            </div>
+            <p className="text-xs text-(--muted-foreground)">
+              {language === "ar"
+                ? "اختر الثيم المفضل لديك لتخصيص ألوان التطبيق بالكامل."
+                : "Choose your favorite theme preset to customize the app interface."}
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">
+              {Object.entries(customThemes).map(([key, themeObj]) => {
+                const isSelected = activeThemeKey === key;
+                const currentVars = themeObj[theme as "light" | "dark"];
+
+                return (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => handleThemeChange(key as keyof typeof customThemes)}
+                    className={`flex items-center gap-3 p-3 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
+                      isSelected
+                        ? "border-(--primary) bg-(--secondary) text-(--secondary-foreground) shadow-sm ring-1 ring-(--primary)"
+                        : "border-(--border) bg-(--background) text-(--foreground) hover:bg-(--surface-muted)"
+                    }`}
+                  >
+                    <span
+                      className="w-4 h-4 rounded-full shrink-0 border border-black/10"
+                      style={{ backgroundColor: currentVars["--primary"] }}
+                    />
+                    <span className="truncate">{themeObj.name}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </CardContent>
+        </Card>
+
+       
         <Card className="bg-(--surface) border-(--border)">
           <CardContent className="p-6 space-y-4">
             <div className="flex items-center gap-2">
@@ -104,6 +166,7 @@ export default function Setting() {
         </Card>
       </div>
 
+     
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
           <div className="bg-(--surface) border border-(--border) rounded-2xl p-6 max-w-md w-full space-y-4 shadow-2xl animate-in fade-in zoom-in duration-150">
