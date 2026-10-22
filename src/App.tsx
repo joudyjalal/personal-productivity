@@ -3,21 +3,18 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { Shell } from "@/components/layout/Shell";
 import Dashboard from "@/pages/Dashboard";
-import Sleep from "@/pages/Sleep"
+import Sleep from "@/pages/Sleep";
 import DailySchedule from "@/pages/DailySchedule";
 import Goals from "@/pages/Goals";
 import Notes from "@/pages/Notes";
 import EndOfDay from "@/pages/EndOfDay";
-import Login from "@/pages/auth/Login";
-import Register from "@/pages/auth/Register";
 import NotFound from "@/pages/NotFound";
+import Settings  from "@/pages/Setting";
 function App() {
   return (
     <ThemeProvider>
       <Router>
         <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
           <Route
             path="/*"
             element={
@@ -29,6 +26,7 @@ function App() {
                   <Route path="/notes" element={<Notes />} />
                   <Route path="/sleep" element={<Sleep />} />
                   <Route path="/eod" element={<EndOfDay />} />
+                  <Route path="/setting" element={<Settings />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </Shell>

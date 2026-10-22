@@ -13,6 +13,7 @@ const routeTitles: Record<string, string> = {
   "/notes": "Notes",
   "/sleep": "Sleep",
   "/eod": "End of Day",
+  "/setting": "Setting"
 };
 
 type TopbarProps = {

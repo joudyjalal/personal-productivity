@@ -6,6 +6,7 @@ import {
   FileText,
   CheckSquare,
   Moon,
+  Settings,
 } from "lucide-react";
 
 const navItems = [
@@ -15,6 +16,7 @@ const navItems = [
   { name: "Notes", path: "/notes", icon: FileText },
   { name: "Sleep", path: "/sleep", icon: Moon },
   { name: "End of Day", path: "/eod", icon: CheckSquare },
+  { name: "Setting", path: "/setting", icon: Settings },
 ];
 
 type SidebarProps = {
