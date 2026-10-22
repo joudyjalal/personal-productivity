@@ -1,4 +1,5 @@
-import  { createContext, useContext, useEffect, useState } from "react"
+import { createContext, useContext, useEffect, useState } from "react"
+import { customThemes, applyTheme } from "@/lib/utlis/theme.ts"
 
 type Theme = "dark" | "light"
 
@@ -24,6 +25,14 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     root.classList.add(`theme-${theme}`)
     
     localStorage.setItem("theme", theme)
+
+    
+    const savedThemeKey = localStorage.getItem("life_os_custom_theme") as keyof typeof customThemes
+    if (savedThemeKey && customThemes[savedThemeKey]) {
+      applyTheme(savedThemeKey, theme)
+    } else {
+      applyTheme("ocean", theme) 
+    }
   }, [theme])
 
   const toggleTheme = () => {
@@ -38,9 +47,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 }
 
 export function useTheme() {
-  const context = useContext(ThemeContext)
-  if (!context) {
+  const contextInstance = useContext(ThemeContext)
+  if (!contextInstance) {
     throw new Error("useTheme must be used within a ThemeProvider")
   }
-  return context
+  return contextInstance
 }
